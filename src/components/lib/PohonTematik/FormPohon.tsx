@@ -15,8 +15,8 @@ const FormPohon: React.FC<{ formId: number; onSave: (data: any, id: number) => v
         <div className="flex pt-3 justify-center font-bold text-lg uppercase border my-3 py-3 border-black">
           <h1>Buat Sub Tematik Baru</h1>
         </div>
-        <div className="flex justify-center my-3">
-          <form onSubmit={handleSave}>
+        <div className="flex justify-center my-3 ">
+          <form onSubmit={handleSave} className="w-full">
             <div className="flex flex-col py-3">
               <label className="uppercase text-xs font-bold text-gray-700 my-2" htmlFor="tema">
                 Tema:

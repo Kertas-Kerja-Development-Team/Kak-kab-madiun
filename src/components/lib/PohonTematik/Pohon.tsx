@@ -1,17 +1,14 @@
-import { TbCirclePlus } from 'react-icons/tb';
 import { useState } from 'react';
 import FormPohon from './FormPohon';
+import { TbCirclePlus } from 'react-icons/tb';
 
-
-export default (tema: any) => {
-  const [childPohons, setChildPohons] = useState(tema.tema.childs || []);
+export const Pohon: React.FC<{ tema: any }> = ({ tema }) => {
+  const [childPohons, setChildPohons] = useState(tema.childs || []);
   const [formList, setFormList] = useState<number[]>([]); // List of form IDs
-
   // Adds a new form entry
   const newChild = () => {
-    setFormList([...formList, Date.now()]); // Use unique IDs
+    setFormList([...formList, Date.now()]); // Using unique IDs
   };
-
   // Add new item and remove form entry
   const addNewItem = (newItem: any, formId: number) => {
     setChildPohons([...childPohons, newItem]);
@@ -20,12 +17,30 @@ export default (tema: any) => {
 
   return (
     <li>
-      <Pohon tema={tema.tema} newChild={newChild} />
-      <ul className="parent">
+      <div className="tf-nc tf flex flex-col w-[600px] rounded-lg shadow-lg shadow-slate-500">
+        {/* HEADER */}
+        <div className="flex pt-3 justify-center font-bold text-lg uppercase border my-3 py-3 border-black">
+          <h1>{tema.jenis_pohon}</h1>
+        </div>
+        {/* BODY */}
+        <div className="flex justify-center my-3">
+          <TablePohon item={tema} />
+        </div>
+        {/* button */}
+        <div className="flex justify-center border my-3 py-3 border-black">
+        </div>
+        {/* footer */}
+        <div className="flex justify-center my-3 py-3">
+          <button className={`px-3 flex justify-center items-center py-1 bg-gradient-to-r border-2 border-[#00A607] hover:bg-[#00A607] text-[#00A607] hover:text-white rounded-lg`}
+            onClick={newChild} >
+            <TbCirclePlus className='mr-1' />
+            {newChildButtonName(tema.jenis_pohon)}
+          </button>
+        </div>
+      </div>
+      <ul className="child-pohons">
         {childPohons.map((dahan: any, index: any) => (
-          <li>
-            <Pohon tema={dahan} newChild={newChild} key={index} />
-          </li>
+          <Pohon tema={dahan} key={index} />
         ))}
         {formList.map((formId) => (
           <FormPohon
@@ -40,8 +55,34 @@ export default (tema: any) => {
   )
 }
 
+export const TablePohon = (props: any) => {
+  const tema = props.item.tema
+  const keterangan = props.item.keterangan
+  return (
+    <table className='w-full'>
+      <tbody>
+        <tr>
+          <td className="min-w-[100px] border px-2 py-3 border-black text-start">Tema</td>
+          <td className="min-w-[300px] border px-2 py-3 border-black text-start">{tema}</td>
+        </tr>
+        <tr>
+          <td className="min-w-[100px] border px-2 py-3 border-black text-start">Indikator</td>
+          <td className="min-w-[300px] border px-2 py-3 border-black text-start">IND X</td>
+        </tr>
+        <tr>
+          <td className="min-w-[100px] border px-2 py-3 border-black text-start">Target/Satuan</td>
+          <td className="min-w-[300px] border px-2 py-3 border-black text-start">TARGET X</td>
+        </tr>
+        <tr>
+          <td className="min-w-[100px] border px-2 py-3 border-black text-start">Keterangan</td>
+          <td className="min-w-[300px] border px-2 py-3 border-black text-start">{keterangan}</td>
+        </tr>
+      </tbody>
+    </table>
+  )
+}
 
-function newChildButtonName(currLevel: string): string {
+export const newChildButtonName = (currLevel: string): string => {
   switch (currLevel) {
     case 'Tematik':
       return 'Sub Tematik';
@@ -52,59 +93,4 @@ function newChildButtonName(currLevel: string): string {
     default:
       return '-'
   }
-}
-
-const Pohon: React.FC<{ tema: any; newChild?: () => void }> = ({ tema, newChild }) => {
-  return (
-    <div className="tf-nc tf flex flex-col w-[600px] rounded-lg shadow-lg shadow-slate-500">
-      {/* HEADER */}
-      <div className="flex pt-3 justify-center font-bold text-lg uppercase border my-3 py-3 border-black">
-        <h1>{tema.jenis_pohon}</h1>
-      </div>
-      {/* BODY */}
-      <PohonBody item={tema} />
-      {/* button */}
-      <div className="flex justify-center border my-3 py-3 border-black">
-      </div>
-      {/* footer */}
-      <div className="flex justify-center my-3 py-3">
-        <button
-          className={`px-3 flex justify-center items-center py-1 bg-gradient-to-r border-2 border-[#00A607] hover:bg-[#00A607] text-[#00A607] hover:text-white rounded-lg`}
-          onClick={newChild}
-        >
-          <TbCirclePlus className='mr-1' />
-          {newChildButtonName(tema.jenis_pohon)}
-        </button>
-      </div>
-    </div>
-  )
-}
-
-const PohonBody = (props: any) => {
-  const tema = props.item.tema
-  const keterangan = props.item.keterangan
-  return (
-    <div className="flex justify-center my-3">
-      <table className='w-full'>
-        <tbody>
-          <tr>
-            <td className="min-w-[100px] border px-2 py-3 border-black text-start">Tema</td>
-            <td className="min-w-[300px] border px-2 py-3 border-black text-start">{tema}</td>
-          </tr>
-          <tr>
-            <td className="min-w-[100px] border px-2 py-3 border-black text-start">Indikator</td>
-            <td className="min-w-[300px] border px-2 py-3 border-black text-start">IND X</td>
-          </tr>
-          <tr>
-            <td className="min-w-[100px] border px-2 py-3 border-black text-start">Target/Satuan</td>
-            <td className="min-w-[300px] border px-2 py-3 border-black text-start">TARGET X</td>
-          </tr>
-          <tr>
-            <td className="min-w-[100px] border px-2 py-3 border-black text-start">Keterangan</td>
-            <td className="min-w-[300px] border px-2 py-3 border-black text-start">{keterangan}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  )
 }

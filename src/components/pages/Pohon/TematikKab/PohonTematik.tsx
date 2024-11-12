@@ -7,7 +7,7 @@ import { AlertNotification, AlertQuestion } from '@/components/global/Alert';
 import { getOpdTahun } from '@/components/lib/Cookie';
 import { OpdTahunNull } from '@/components/global/OpdTahunNull';
 import { ModalAddStrategic, ModalEditStrategic } from '../ModalStrategic';
-import Pohon from '@/components/lib/PohonTematik/Pohon';
+import { Pohon } from '@/components/lib/PohonTematik/Pohon';
 
 interface pohontematik {
   id: number;
@@ -107,11 +107,13 @@ const PohonTematik = ({ id }: pohontematik) => {
   }
 
   return (
-      <div className="tf-tree text-center mt-3">
-        <ul>
+    <div className="tf-tree text-center mt-3">
+      <ul>
+        <li>
           <Pohon tema={Pokin} />
-        </ul>
-      </div>
+        </li>
+      </ul>
+    </div>
   )
 }
 
