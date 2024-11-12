@@ -78,7 +78,7 @@ const PohonTematik = ({ id }: pohontematik) => {
           throw new Error('terdapat kesalahan di koneksi backend');
         }
         const result = await response.json();
-        const data = result.data?.tematiks[0] || [];
+        const data = result?.data || [];
         setPokin(data);
       } catch (err) {
         setError('gagal mendapatkan data, terdapat kesalahan backend/server saat mengambil data pohon kinerja tematik');
@@ -86,19 +86,32 @@ const PohonTematik = ({ id }: pohontematik) => {
         setLoading(false);
       }
     }
-      if (id != undefined) {
+    if (id != undefined) {
       fetchTematikKab();
     }
   }, [id]);
 
+  if (error) {
+    return (
+      <div className="flex flex-col p-5 border-b-2 border-x-2 rounded-b-xl">
+        <h1 className="text-red-500">{error}</h1>
+      </div>
+    )
+  }
+  if (Loading) {
+    return (
+      <div className="flex flex-col p-5 border-b-2 border-x-2 rounded-b-xl">
+        <LoadingBeat className="mx-5 py-5" />
+      </div>
+    )
+  }
+
   return (
-    <div className="flex flex-col p-5 border-b-2 border-x-2 rounded-b-xl">
       <div className="tf-tree text-center mt-3">
         <ul>
           <Pohon tema={Pokin} />
         </ul>
       </div>
-    </div>
   )
 }
 

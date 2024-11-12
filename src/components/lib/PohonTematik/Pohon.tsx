@@ -1,27 +1,46 @@
+import { TbCirclePlus, TbPencil, TbTrash } from 'react-icons/tb';
+import { useState } from 'react';
+
+
 export default (tema: any) => {
-  const childs = tema.tema.sub_tematiks
-  const listDahans = childs?.map((dahan: any, index: any) =>
-    <li>
-      <Pohon tema={dahan} jenisDahan="Sub Tematik" key={index} />
-    </li>
-  );
+  const [childPohons, setChildPohons] = useState(tema.tema.childs || []);
   return (
     <li>
-      <Pohon tema={tema} jenisDahan="Tematik" />
+      <Pohon tema={tema.tema} />
       <ul>
-        {listDahans}
+        {childPohons.map((dahan: any, index: any) => (
+          <li>
+            <Pohon tema={dahan} key={index} />
+          </li>
+        ))}
       </ul>
     </li>
   )
 }
 
+const newChild = () => {
+  console.log('hello')
+}
+
+function newChildButtonName(currLevel: string): string {
+  switch(currLevel) {
+      case 'Tematik':
+      return 'Sub Tematik';
+      case 'SubTematik':
+      return 'Sub Sub Tematik';
+      case 'Sub Sub Tematik':
+      return 'Super Sub Tematik';
+      default:
+      return '-'
+  }
+}
+
 const Pohon = (props: any) => {
-  console.log(props)
   return (
     <div className="tf-nc tf flex flex-col w-[600px] rounded-lg shadow-lg shadow-slate-500">
       {/* HEADER */}
       <div className="flex pt-3 justify-center font-bold text-lg uppercase border my-3 py-3 border-black">
-        <h1>{props.jenisDahan}</h1>
+        <h1>{props.tema.jenis_pohon}</h1>
       </div>
       {/* BODY */}
       <PohonBody item={props.tema} />
@@ -30,14 +49,21 @@ const Pohon = (props: any) => {
       </div>
       {/* footer */}
       <div className="flex justify-center my-3 py-3">
+        <button
+          className={`px-3 flex justify-center items-center py-1 bg-gradient-to-r border-2 border-[#00A607] hover:bg-[#00A607] text-[#00A607] hover:text-white rounded-lg`}
+          onClick={newChild}
+        >
+          <TbCirclePlus className='mr-1' />
+          {newChildButtonName(props.tema.jenis_pohon)}
+        </button>
       </div>
     </div>
   )
 }
 
-const PohonBody = (item: any) => {
-  const tema = item.item.tema_sub_tematik
-  const keterangan = item.item.keterangan
+const PohonBody = (props: any) => {
+  const tema = props.item.tema
+  const keterangan = props.item.keterangan
   return (
     <div className="flex justify-center my-3">
       <table className='w-full'>
