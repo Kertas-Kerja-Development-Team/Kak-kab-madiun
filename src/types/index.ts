@@ -66,3 +66,11 @@ export interface PermasalahanOpd {
     level_pohon: number;
     masalah: string;
 }
+
+export type User = {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    roles: string[];
+}
