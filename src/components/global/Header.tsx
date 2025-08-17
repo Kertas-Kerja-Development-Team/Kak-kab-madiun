@@ -18,7 +18,7 @@ interface OptionTypeString {
 }
 
 type HeaderProps = {
-    user?: User;
+    user?: User | null;
 };
 
 const Header = ({ user }: HeaderProps) => {
@@ -26,7 +26,6 @@ const Header = ({ user }: HeaderProps) => {
     const [Tahun, setTahun] = useState<OptionType | null>(null);
     const [SelectedOpd, setSelectedOpd] = useState<OptionTypeString | null>(null);
     const [Opd, setOpd] = useState<OptionTypeString | null>(null);
-    /* const [user, setUser] = useState<any>(null); */
     const [OpdOption, setOpdOption] = useState<OptionTypeString[]>([]);
     const [IsLoading, setIsLoading] = useState<boolean>(false);
     const token = getToken();
@@ -125,88 +124,90 @@ const Header = ({ user }: HeaderProps) => {
     };
 
     return (
-        <div className="flex flex-wrap gap-2 justify-between items-center rounded-2xl mx-2 mt-2 bg-gradient-to-r from-[#182C4E] to-[#17212D] py-4 pr-2 pl-3">
-            <div className="flex flex-col text-white max-w-[400px]">
-                {user?.roles.includes('super_admin') ??
-                    <h1 className="font-light text-sm">{Opd ? Opd?.label : "Pilih OPD"}</h1>
-                }
-                {/* <h1 className="font-light text-sm">{Tahun ? Tahun?.value : "Pilih Tahun"} - Kab. Madiun</h1> */}
-            </div>
-            <div className="flex flex-wrap items-center">
-                {(user?.roles.some(r => ['super_admin', 'reviewer'].includes(r))) && (
+        <div>
+            <div className="flex flex-wrap gap-2 justify-between items-center rounded-2xl mx-2 mt-2 bg-gradient-to-r from-[#182C4E] to-[#17212D] py-4 pr-2 pl-3">
+                <div className="flex flex-col text-white max-w-[400px]">
+                    {user?.roles.includes('super_admin') ??
+                        <h1 className="font-light text-sm">{Opd ? Opd?.label : "Pilih OPD"}</h1>
+                    }
+                    {/* <h1 className="font-light text-sm">{Tahun ? Tahun?.value : "Pilih Tahun"} - Kab. Madiun</h1> */}
+                </div>
+                <div className="flex flex-wrap items-center">
+                    {(user?.roles.some(r => ['super_admin', 'reviewer'].includes(r))) && (
+                        <Select
+                            styles={{
+                                control: (baseStyles) => ({
+                                    ...baseStyles,
+                                    borderRadius: '8px',
+                                    minWidth: '157.562px',
+                                    maxWidth: '160px',
+                                    minHeight: '38px'
+                                })
+                            }}
+                            onChange={(option) => setSelectedOpd(option)}
+                            options={OpdOption}
+                            placeholder="Pilih OPD ..."
+                            value={SelectedOpd || Opd}
+                            isLoading={IsLoading}
+                            isSearchable
+                            onMenuOpen={() => {
+                                if (OpdOption.length === 0) {
+                                    fetchOpd();
+                                }
+                            }}
+                        />
+                    )}
                     <Select
                         styles={{
                             control: (baseStyles) => ({
                                 ...baseStyles,
-                                borderRadius: '8px',
+                                borderTopRightRadius: '0px',
+                                borderBottomRightRadius: '0px',
+                                borderTopLeftRadius: '8px',
+                                borderBottomLeftRadius: '8px',
+                                marginLeft: '4px',
+                                // marginRight: '4px',
                                 minWidth: '157.562px',
                                 maxWidth: '160px',
                                 minHeight: '38px'
                             })
                         }}
-                        onChange={(option) => setSelectedOpd(option)}
-                        options={OpdOption}
-                        placeholder="Pilih OPD ..."
-                        value={SelectedOpd || Opd}
-                        isLoading={IsLoading}
+                        options={TahunOption}
+                        placeholder="Pilih Tahun ..."
+                        onChange={(option) => setTahun(option)}
+                        value={Tahun}
                         isSearchable
-                        onMenuOpen={() => {
-                            if (OpdOption.length === 0) {
-                                fetchOpd();
-                            }
-                        }}
                     />
-                )}
-                <Select
-                    styles={{
-                        control: (baseStyles) => ({
-                            ...baseStyles,
-                            borderTopRightRadius: '0px',
-                            borderBottomRightRadius: '0px',
-                            borderTopLeftRadius: '8px',
-                            borderBottomLeftRadius: '8px',
-                            marginLeft: '4px',
-                            // marginRight: '4px',
-                            minWidth: '157.562px',
-                            maxWidth: '160px',
-                            minHeight: '38px'
-                        })
-                    }}
-                    options={TahunOption}
-                    placeholder="Pilih Tahun ..."
-                    onChange={(option) => setTahun(option)}
-                    value={Tahun}
-                    isSearchable
-                />
-                <button
-                    className="border border-white text-white px-3 py-2 min-w-20 max-h-[37.5px] rounded-br-lg rounded-tr-lg hover:bg-white hover:text-gray-800"
-                    onClick={() => {
-                        handleOpd(SelectedOpd);
-                        handleTahun(Tahun);
-                    }}
-                >
-                    Aktifkan
-                </button>
-                <div className="flex gap-3 ps-3">
-                    <div className="flex flex-wrap gap-2 items-center">
-                        {user?.roles?.map((role: string, i: number) => (
-                            <span
-                                key={i}
-                                className={`px-3 py-1 text-sm rounded-full font-medium flex items-center justify-center border-2
+                    <button
+                        className="border border-white text-white px-3 py-2 min-w-20 max-h-[37.5px] rounded-br-lg rounded-tr-lg hover:bg-white hover:text-gray-800"
+                        onClick={() => {
+                            handleOpd(SelectedOpd);
+                            handleTahun(Tahun);
+                        }}
+                    >
+                        Aktifkan
+                    </button>
+                    <div className="flex gap-3 ps-3">
+                        <div className="flex flex-wrap gap-2 items-center">
+                            {user?.roles?.map((role: string, i: number) => (
+                                <span
+                                    key={i}
+                                    className={`px-3 py-1 text-sm rounded-full font-medium flex items-center justify-center border-2
                            ${roleColors[role] || "bg-gray-100 text-gray-700"}`} >
-                                {role}
-                            </span>
-                        ))}
+                                    {role}
+                                </span>
+                            ))}
+                        </div>
+                        <div className="border border-white text-white px-3 py-2 mx-1 rounded-lg hover:bg-white hover:text-gray-800">
+                            {user?.firstName}
+                        </div>
                     </div>
-                    <div className="border border-white text-white px-3 py-2 mx-1 rounded-lg hover:bg-white hover:text-gray-800">
-                        {user?.firstName}
-                    </div>
-                </div>
 
-                {/* SOLUSI MULTIPLE ROLES */}
-                {/* {user?.roles?.some((role: string) => ["level_3", "level_4"].includes(role)) && (
+                    {/* SOLUSI MULTIPLE ROLES */}
+                    {/* {user?.roles?.some((role: string) => ["level_3", "level_4"].includes(role)) && (
                     <button className="border border-white text-white px-3 py-2 mx-1 min-w-20 max-h-[37.5px] rounded-lg hover:bg-white hover:text-gray-800">USER WITH LEVEL</button>
                 )} */}
+                </div>
             </div>
         </div>
     )

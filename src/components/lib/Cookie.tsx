@@ -86,7 +86,7 @@ export const getUser = () => {
 }
 
 export const getToken = () => {
-    const get_Token = getCookie("token")
+    const get_Token = getCookie("SESSION")
     if (get_Token) {
         return get_Token;
     }

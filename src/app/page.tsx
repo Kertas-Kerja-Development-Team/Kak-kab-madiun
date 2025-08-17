@@ -1,21 +1,19 @@
-'use client'
+"use client"
 
 import { ButtonSky } from "@/components/global/Button";
-import Header from "@/components/global/Header";
 import LoginButton from "@/components/global/LoginButton";
 import { useUser } from "@/context/UserContext";
 import Link from "next/link";
 import { TbBook2, TbDownload } from "react-icons/tb";
 
 const Dashboard = () => {
-
     const { user, loading, logoutClient } = useUser();
 
     if (loading) return <p>Loading...</p>;
     if (!user) return (
         <div className="flex flex-col items-center justify-center h-screen">
             <p className="mb-4 text-lg font-medium">
-                Session habis, harap login terlebih dahulu
+                harap login terlebih dahulu
             </p>
             <LoginButton />
         </div>
@@ -23,7 +21,6 @@ const Dashboard = () => {
 
     return (
         <div>
-            <Header user={user} />
             <div className="flex flex-col gap-2">
                 <h1 className="p-5 rounded-xl border border-emerald-500">
                     Selamat Datang, {user?.firstName ?? 'di halaman dashboard'}

@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3002",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "html2canvas": "^1.4.1",
+    "jose": "^6.0.12",
     "jwt-decode": "^4.0.0",
     "next": "^14.2.16",
     "nextjs-toploader": "^3.7.15",
@@ -20,6 +22,7 @@
     "react-select": "^5.8.1",
     "react-spinners": "^0.14.1",
     "sweetalert2": "^11.6.13",
+    "tailwind-merge": "^3.3.1",
     "treeflex": "^2.0.1"
   },
   "devDependencies": {
