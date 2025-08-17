@@ -11,15 +11,15 @@ type MenuItem = {
 
 const subMenuMasterOpd: MenuItem[] = [
     {
-        id: "master_opd",
-        name: "Data Master OPD",
+        id: "master_user_opd",
+        name: "User OPD",
         href: "/useropd",
         icon: <TbUser className="text-xl" />,
         sub_menu: [],
     },
     {
-        id: "master_opd",
-        name: "Data Master OPD",
+        id: "master_subkegiatan_opd",
+        name: "Sub Kegiatan OPD",
         href: "/subkegiatanopd",
         icon: <TbFileCode2 className="text-xl" />,
         sub_menu: [],

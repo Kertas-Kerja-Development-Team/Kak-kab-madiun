@@ -25,8 +25,10 @@ type MenuItem = {
     sub_menu: MenuItem[] | [];
 }
 
-const renderSubMenu = (menu: MenuItem, openMenus: Record<string, boolean>, isOpen: boolean, toggleMenu: (id: string) => void) => {
+const renderSubMenu = (menu: MenuItem, openMenus: Record<string, boolean>, isOpen: boolean, toggleMenu: (id: string) => void, currentUrl: string) => {
     const isOpenMenu = openMenus[menu.id] ?? false;
+    const isActive = currentUrl.startsWith(menu.href);
+
     if (!menu.sub_menu || menu.sub_menu.length === 0) return null;
 
     return (
@@ -35,12 +37,13 @@ const renderSubMenu = (menu: MenuItem, openMenus: Record<string, boolean>, isOpe
                 <ul className={`transition-all duration-300 ease-in-out px-3 py-2 flex flex-col border-l-2 border-white rounded-b-xl ml-2 max-h-screen opacity-100`}>
                     {menu.sub_menu.map(sub => {
                         const isParent = sub.href === '#';
+                        const isSubActive = currentUrl.startsWith(sub.href);
                         return (
                             <div key={sub.id}>
                                 {isParent ? (
                                     <li
                                         onClick={() => toggleMenu(sub.id)}
-                                        className="flex justify-between items-center font-medium gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500 transition-all duration-300 ease-in-out"
+                                        className={`flex justify-between items-center font-medium gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500 ${isSubActive ? 'bg-slate-500' : ''}`}
                                     >
                                         <div className="flex items-center gap-2">
                                             {sub.icon}
@@ -52,13 +55,13 @@ const renderSubMenu = (menu: MenuItem, openMenus: Record<string, boolean>, isOpe
                                     </li>
                                 ) : (
                                     <Link href={sub.href}>
-                                        <li className={`flex items-center gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500`}>
+                                        <li className={`flex items-center gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500 ${isSubActive ? 'bg-slate-500' : ''}`}>
                                             {sub.icon}
                                             <span className={`${!isOpen && 'hidden'} origin-left duration-200`}>{sub.name}</span>
                                         </li>
                                     </Link>
                                 )}
-                                {isParent && renderSubMenu(sub, openMenus, isOpen, toggleMenu)}
+                                {isParent && renderSubMenu(sub, openMenus, isOpen, toggleMenu, currentUrl)}
                             </div>
                         );
                     })}
@@ -68,15 +71,16 @@ const renderSubMenu = (menu: MenuItem, openMenus: Record<string, boolean>, isOpe
     );
 };
 
-const renderMenuItems = (userMenus: MenuItem[], openMenus: Record<string, boolean>, isOpen: boolean, toggleMenu: (id: string) => void) => {
+const renderMenuItems = (userMenus: MenuItem[], openMenus: Record<string, boolean>, isOpen: boolean, toggleMenu: (id: string) => void, currentUrl: string) => {
     return userMenus.map(menu => {
         const isParent = menu.href === '#';
+        const isActive = currentUrl.startsWith(menu.href);
         if (isParent) {
             return (
                 <div key={menu.id}>
                     <li
                         onClick={() => toggleMenu(menu.id)}
-                        className="flex justify-between items-center font-medium gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500 transition-all duration-300 ease-in-out"
+                        className={`flex justify-between items-center font-medium gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500 ${isActive ? 'bg-slate-500' : ''}`}
                     >
                         <div className="flex items-center gap-2">
                             {menu.icon}
@@ -86,14 +90,14 @@ const renderMenuItems = (userMenus: MenuItem[], openMenus: Record<string, boolea
                         </div>
                         <TbChevronRight className={`transition-all duration-200 ease-in-out ${openMenus[menu.id] ? "rotate-90" : ""}`} />
                     </li>
-                    {renderSubMenu(menu, openMenus, isOpen, toggleMenu)}
+                    {renderSubMenu(menu, openMenus, isOpen, toggleMenu, currentUrl)}
                 </div>
             );
         }
 
         return (
             <Link key={menu.id} href={menu.href}>
-                <li className={`flex items-center gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500`}>
+                <li className={`flex items-center gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500 ${isActive ? 'bg-slate-500' : ''}`}>
                     {menu.icon}
                     <span className={`${!isOpen && 'hidden'} origin-left duration-200`}>{menu.name}</span>
                 </li>
@@ -165,7 +169,7 @@ export default function Sidebar({ isZoomed, isOpen, toggleSidebar, user }: Sideb
                             <span className={`${!isOpen && 'hidden'} origin-left duration-200`}>Dashboard</span>
                         </li>
                     </Link>
-                    {renderMenuItems(userMenus, openMenus, isOpen, toggleMenu)}
+                    {renderMenuItems(userMenus, openMenus, isOpen, toggleMenu, url)}
                 </ul>
             </div>
         </aside>
