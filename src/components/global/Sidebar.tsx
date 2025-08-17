@@ -1,12 +1,12 @@
 import Image from 'next/image';
-import { TbHome, TbChevronRight } from 'react-icons/tb'
-import { usePathname, useParams } from 'next/navigation';
+import { TbHome, TbChevronRight } from 'react-icons/tb';
+import { usePathname } from 'next/navigation';
 import { useBrandingContext } from '@/context/BrandingContext';
 import Link from 'next/link';
-import { TbCircleArrowLeftFilled } from 'react-icons/tb'
-import { DataMaster } from '@/menus/DataMaster'
-import { DataMasterOpd } from '@/menus/DataMasterOpd'
-import { User } from '@/types'
+import { TbCircleArrowLeftFilled } from 'react-icons/tb';
+import { DataMaster } from '@/menus/DataMaster';
+import { DataMasterOpd } from '@/menus/DataMasterOpd';
+import { User } from '@/types';
 import { ReactNode } from "react";
 import { useState } from "react";
 
@@ -24,6 +24,83 @@ type MenuItem = {
     icon: ReactNode;
     sub_menu: MenuItem[] | [];
 }
+
+const renderSubMenu = (menu: MenuItem, openMenus: Record<string, boolean>, isOpen: boolean, toggleMenu: (id: string) => void) => {
+    const isOpenMenu = openMenus[menu.id] ?? false;
+    if (!menu.sub_menu || menu.sub_menu.length === 0) return null;
+
+    return (
+        <>
+            {isOpenMenu && (
+                <ul className={`transition-all duration-300 ease-in-out px-3 py-2 flex flex-col border-l-2 border-white rounded-b-xl ml-2 max-h-screen opacity-100`}>
+                    {menu.sub_menu.map(sub => {
+                        const isParent = sub.href === '#';
+                        return (
+                            <div key={sub.id}>
+                                {isParent ? (
+                                    <li
+                                        onClick={() => toggleMenu(sub.id)}
+                                        className="flex justify-between items-center font-medium gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500 transition-all duration-300 ease-in-out"
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            {sub.icon}
+                                            <span className={`${!isOpen && 'hidden'} origin-left duration-200`}>
+                                                {sub.name}
+                                            </span>
+                                        </div>
+                                        <TbChevronRight className={`transition-all duration-200 ease-in-out ${openMenus[sub.id] ? "rotate-90" : ""}`} />
+                                    </li>
+                                ) : (
+                                    <Link href={sub.href}>
+                                        <li className={`flex items-center gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500`}>
+                                            {sub.icon}
+                                            <span className={`${!isOpen && 'hidden'} origin-left duration-200`}>{sub.name}</span>
+                                        </li>
+                                    </Link>
+                                )}
+                                {isParent && renderSubMenu(sub, openMenus, isOpen, toggleMenu)}
+                            </div>
+                        );
+                    })}
+                </ul>
+            )}
+        </>
+    );
+};
+
+const renderMenuItems = (userMenus: MenuItem[], openMenus: Record<string, boolean>, isOpen: boolean, toggleMenu: (id: string) => void) => {
+    return userMenus.map(menu => {
+        const isParent = menu.href === '#';
+        if (isParent) {
+            return (
+                <div key={menu.id}>
+                    <li
+                        onClick={() => toggleMenu(menu.id)}
+                        className="flex justify-between items-center font-medium gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500 transition-all duration-300 ease-in-out"
+                    >
+                        <div className="flex items-center gap-2">
+                            {menu.icon}
+                            <span className={`${!isOpen && 'hidden'} origin-left duration-200`}>
+                                {menu.name}
+                            </span>
+                        </div>
+                        <TbChevronRight className={`transition-all duration-200 ease-in-out ${openMenus[menu.id] ? "rotate-90" : ""}`} />
+                    </li>
+                    {renderSubMenu(menu, openMenus, isOpen, toggleMenu)}
+                </div>
+            );
+        }
+
+        return (
+            <Link key={menu.id} href={menu.href}>
+                <li className={`flex items-center gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500`}>
+                    {menu.icon}
+                    <span className={`${!isOpen && 'hidden'} origin-left duration-200`}>{menu.name}</span>
+                </li>
+            </Link>
+        );
+    });
+};
 
 export default function Sidebar({ isZoomed, isOpen, toggleSidebar, user }: SidebarProps) {
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
@@ -43,6 +120,7 @@ export default function Sidebar({ isZoomed, isOpen, toggleSidebar, user }: Sideb
             [id]: !prev[id],
         }));
     };
+
     return (
         <aside className="flex">
             {isZoomed && (
@@ -58,13 +136,11 @@ export default function Sidebar({ isZoomed, isOpen, toggleSidebar, user }: Sideb
                     <Image
                         className="mb-3 transition-all duration-300 ease-in-out"
                         src={branding.logo}
-                        // src="/universal.png"
                         alt="logo"
                         width={!isZoomed ? 80 : 80}
                         height={!isZoomed ? 80 : 80}
                     />
                 </div>
-                {/* tombol sidebar default */}
                 {!isZoomed && (
                     <div
                         className={`fixed top-1 p-2 mt-5 cursor-pointer border border-white text-white duration-200 rounded-md z-50 hover:bg-white hover:text-[#182C4E] ${!isOpen ? 'rotate-180 bg-gray-800' : 'left-[13rem]'}`}
@@ -73,7 +149,6 @@ export default function Sidebar({ isZoomed, isOpen, toggleSidebar, user }: Sideb
                         <TbCircleArrowLeftFilled />
                     </div>
                 )}
-                {/* header sidebar */}
                 <div className="flex gap-x-4 items-center">
                     <div className={`flex flex-wrap justify-center text-white text-center text-lg ${!isOpen && 'scale-0'} duration-300`}>
                         <h2 className='font-bold uppercase'>
@@ -83,63 +158,14 @@ export default function Sidebar({ isZoomed, isOpen, toggleSidebar, user }: Sideb
                     </div>
                 </div>
 
-                {/* AWAL MENU SIDEBAR */}
                 <ul className="pt-6">
-                    {/* LABEL DASHBOARD */}
                     <Link href="/">
                         <li className={`flex items-center font-medium gap-x-2 cursor-pointer p-2 rounded-xl transition-all duration-300 ${url === "/" ? "bg-white text-gray-800" : "hover:bg-slate-500"}`}>
                             <TbHome className="text-xl" />
                             <span className={`${!isOpen && 'hidden'} origin-left duration-200`}>Dashboard</span>
                         </li>
                     </Link>
-                    {userMenus.map(menu => {
-                        const isParent = !menu.href || menu.href === '#';
-                        const isOpenMenu = openMenus[menu.id] ?? false;
-
-                        if (isParent) {
-                            return (
-                                <>
-                                    <li
-                                        onClick={() => toggleMenu(menu.id)}
-                                        key={menu.id}
-                                        className="flex justify-between items-center font-medium gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500 transition-all duration-300 ease-in-out"
-                                    >
-                                        <div className="flex items-center gap-2">
-                                            {menu.icon}
-                                            <span className={`${!isOpen && 'hidden'} origin-left duration-200`}>
-                                                {menu.name}
-                                            </span>
-                                        </div>
-                                        <TbChevronRight className={`transition-all duration-200 ease-in-out ${isOpenMenu ? "rotate-90" : ""}`} />
-                                    </li>
-                                    {isOpenMenu && menu.sub_menu && (
-                                        <ul className={`transition-all duration-300 ease-in-out px-3 py-2 flex flex-col border-l-2 border-white rounded-b-xl ml-2  max-h-screen opacity-100`}>
-                                            {menu.sub_menu.map(sub => (
-                                                <Link href={sub.href}>
-                                                    <li className={`flex items-center gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500`}
-                                                        key={sub.id}>
-                                                        {sub.icon}
-                                                        <span className={`${!isOpen && 'hidden'} origin-left duration-200`}>{sub.name}</span>
-                                                    </li>
-                                                </Link>
-                                            ))}
-                                        </ul>
-                                    )}
-                                </>
-                            )
-                        }
-
-                        return (
-                            <Link href={menu.href}>
-                                <li className={`flex items-center gap-x-2 cursor-pointer p-2 rounded-xl hover:bg-slate-500`} key={menu.id}>
-                                    {menu.icon}
-                                    <span className={`${!isOpen && 'hidden'} origin-left duration-200`}>{menu.name}</span>
-                                </li>
-                            </Link>
-                        )
-
-                    }
-                    )}
+                    {renderMenuItems(userMenus, openMenus, isOpen, toggleMenu)}
                 </ul>
             </div>
         </aside>
