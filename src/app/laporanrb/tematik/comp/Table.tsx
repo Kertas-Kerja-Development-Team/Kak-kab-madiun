@@ -189,6 +189,7 @@ export const Table = () => {
                                                         </>
                                                     );
                                                 })()}
+                                                <td rowSpan={indikatorCount} className="border p-2 text-center">{item.keterangan}</td>
 
                                                 {/* 🟩 Rencana Aksi + Output + Target + dst. */}
                                                 <td rowSpan={indikatorCount} className="border p-2 text-left">
@@ -229,7 +230,6 @@ export const Table = () => {
                                                 <td rowSpan={indikatorCount} className="border p-2 text-center">-</td>
                                                 <td rowSpan={indikatorCount} className="border p-2 text-center">-</td>
                                                 <td rowSpan={indikatorCount} className="border p-2 text-center">-</td>
-                                                <td rowSpan={indikatorCount} className="border p-2 text-center">-</td>
                                             </tr>
 
                                             {/* ====================== SISA INDIKATOR ====================== */}
@@ -255,6 +255,45 @@ export const Table = () => {
                                             })}
 
                                             {/* ====================== BARIS RENAKSI (SETELAH INDIKATOR) ====================== */}
+                                            {/* ====================== RENAKSI 2, 3, 4, ... ====================== */}
+                                            {renaksi.slice(1).map((ra, raIndex) => (
+                                                <tr key={`ra-${raIndex}`}>
+                                                    {/* Kosongkan kolom indikator 1–11 */}
+                                                    <td colSpan={11} className="p-2 bg-slate-200"></td>
+
+                                                    {/* Kolom Renaksi */}
+                                                    <td className="border p-2 text-left">{ra.rencana_aksi}</td>
+                                                    <td className="border p-2 text-left">
+                                                        {ra.indikator_rencana_aksis?.map((i, idx) => (
+                                                            <div key={idx}>{i.indikator}</div>
+                                                        ))}
+                                                    </td>
+                                                    <td className="border p-2 text-center">
+                                                        {ra.indikator_rencana_aksis?.[0]?.targets?.[0]?.target ?? "-"}
+                                                    </td>
+                                                    <td className="border p-2 text-center">
+                                                        {ra.indikator_rencana_aksis?.[0]?.targets?.[0]?.realisasi ?? "-"}
+                                                    </td>
+                                                    <td className="border p-2 text-center">
+                                                        {ra.indikator_rencana_aksis?.[0]?.targets?.[0]?.satuan ?? "-"}
+                                                    </td>
+                                                    <td className="border p-2 text-center">
+                                                        {ra.indikator_rencana_aksis?.[0]?.targets?.[0]?.capaian ?? "-"}
+                                                    </td>
+
+                                                    <td className="border p-2 text-center">{ra.anggaran}</td>
+                                                    <td className="border p-2 text-center">{ra.realisasi_anggaran}</td>
+                                                    <td className="border p-2 text-center">{ra.opd_koordinator}</td>
+
+                                                    <td className="border p-2 text-left">
+                                                        {ra.nama_pelaksana}<br />{ra.nip_pelaksana}
+                                                    </td>
+
+                                                    <td className="border p-2 text-center">-</td>
+                                                    <td className="border p-2 text-center">-</td>
+                                                    <td className="border p-2 text-center">-</td>
+                                                </tr>
+                                            ))}
                                         </React.Fragment>
                                     );
                                 })
