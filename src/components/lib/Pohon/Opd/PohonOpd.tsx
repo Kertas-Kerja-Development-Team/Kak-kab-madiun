@@ -61,6 +61,7 @@ interface KeteranganTagging {
     id: number;
     id_tagging: number;
     kode_program_unggulan: string;
+    nama_program_prioritas: string;
     keterangan_tagging_program: string;
     tahun: string;
 }
@@ -845,7 +846,7 @@ export const TablePohon = (props: any) => {
                             <div className="flex flex-wrap items-center gap-2 mb-1">
                                 {tg?.keterangan_tagging_program?.map((tp: KeteranganTagging, tp_index: number) => (
                                     <h1 key={tp_index} className="py-1 px-3 text-start text-white bg-yellow-500 rounded-lg">
-                                        {tg.keterangan_tagging_program.length > 1 && `${tp_index + 1}.`} {tp.keterangan_tagging_program || ""}
+                                        {tg.keterangan_tagging_program.length > 1 && `${tp_index + 1}.`} {tp.nama_program_prioritas || ""}
                                     </h1>
                                 ))}
                             </div>
