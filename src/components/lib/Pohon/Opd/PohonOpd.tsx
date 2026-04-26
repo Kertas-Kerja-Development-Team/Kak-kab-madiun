@@ -283,7 +283,10 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             <TbPencil className="mr-1" />
                                             Edit
                                         </ButtonSkyBorder>
-                                        <ButtonGreenBorder onClick={handleCross}>
+                                        <ButtonGreenBorder
+                                            // onClick={handleCross}
+                                            onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
+                                        >
                                             <TbLayersLinked className="mr-1" />
                                             CrossCuting
                                         </ButtonGreenBorder>
@@ -326,7 +329,10 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             <TbPencil className="mr-1" />
                                             Edit
                                         </ButtonSkyBorder>
-                                        <ButtonGreenBorder onClick={handleCross}>
+                                        <ButtonGreenBorder
+                                            // onClick={handleCross}
+                                            onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
+                                        >
                                             <TbLayersLinked className="mr-1" />
                                             CrossCuting
                                         </ButtonGreenBorder>
@@ -367,7 +373,10 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             <TbPencil className="mr-1" />
                                             Edit
                                         </ButtonSkyBorder>
-                                        <ButtonGreenBorder onClick={handleCross}>
+                                        <ButtonGreenBorder
+                                            // onClick={handleCross}
+                                            onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
+                                        >
                                             <TbLayersLinked className="mr-1" />
                                             CrossCuting
                                         </ButtonGreenBorder>
@@ -409,7 +418,10 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             <TbPencil className="mr-1" />
                                             Edit
                                         </ButtonSkyBorder>
-                                        <ButtonGreenBorder onClick={handleCross}>
+                                        <ButtonGreenBorder
+                                            // onClick={handleCross}
+                                            onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
+                                        >
                                             <TbLayersLinked className="mr-1" />
                                             CrossCuting
                                         </ButtonGreenBorder>
