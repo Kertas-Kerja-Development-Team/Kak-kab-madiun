@@ -1,9 +1,11 @@
 export interface Pokin {
     kode_opd: string;
     nama_opd: string;
-    tematik: Tematik[];
+    tematik: Pohon[];
     persentase_cascading: string;
+    is_hidden: boolean;
 }
-export interface Tematik {
+export interface Pohon {
     nama: string;
+    child?: Pohon[];
 }
