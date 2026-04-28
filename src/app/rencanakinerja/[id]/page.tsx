@@ -15,12 +15,19 @@ import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getUser, getOpdTahun } from '@/components/lib/Cookie';
 import { TbDeviceFloppy } from 'react-icons/tb';
+import { getToken } from '@/components/lib/Cookie';
+import { FindallRincianRekin } from './type';
 
 const RincianRencanaKinerja = () => {
 
     const params = useParams();
     const router = useRouter();
     const id_rekin = params.id as string;
+    const token = getToken();
+
+    const [Data, setData] = useState<FindallRincianRekin | null>(null);
+    const [Loading, setLoading] = useState<boolean>(false);
+    const [Error, setError] = useState<boolean>(false);
     const [User, setUser] = useState<any>(null);
     const [Tahun, setTahun] = useState<any>(null);
 
@@ -39,6 +46,36 @@ const RincianRencanaKinerja = () => {
         }
     }, []);
 
+    useEffect(() => {
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
+        const fetchSubKegiatan = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch(`${API_URL}/rencana_kinerja/${id_rekin}/pegawai/${User?.nip}/input_rincian_kak`, {
+                    headers: {
+                        Authorization: `${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const result = await response.json();
+                const hasil = result.rencana_kinerja;
+                if(result.code === 200){
+                    setData(hasil[0]);
+                } else {
+                    setError(true);
+                }
+            } catch (err) {
+                console.log(err);
+                setError(true);
+            } finally {
+                setLoading(false);
+            }
+        };
+        if (User?.nip != undefined) {
+            fetchSubKegiatan();
+        }
+    }, [id_rekin, User, token]);
+
     return (
         <>
             <div className="flex items-center">
@@ -50,14 +87,6 @@ const RincianRencanaKinerja = () => {
             {(User?.roles != 'level_4' && User?.roles != 'level_2') ?
                 <>
                     <div className="my-5">
-                        {/* status sasaran */}
-                        {/* <div className="mt-3 rounded-xl shadow-lg border px-5 py-3">
-                        <h1>Status Sasaran</h1>
-                        <div className="my-3 border"></div>
-                        <button className="w-full uppercase bg-emerald-500 rounded-lg py-1 font-bold my-1">siap ditarik skp</button>
-                        <button className="w-full uppercase bg-emerald-500 rounded-lg py-1 font-bold my-1">manrisk siap diverifikasi</button>
-                        <div className="my-3 border"></div>
-                    </div> */}
                         <Musrebang
                             id={id_rekin}
                             nip={User?.nip}
