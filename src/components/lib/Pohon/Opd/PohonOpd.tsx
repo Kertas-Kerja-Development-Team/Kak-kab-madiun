@@ -288,7 +288,7 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
                                         >
                                             <TbLayersLinked className="mr-1" />
-                                            CrossCuting
+                                            CrossCutting
                                         </ButtonGreenBorder>
                                         <ModalAddCrosscutting isOpen={Cross} onClose={handleCross} id={tema.id} nama_pohon={tema.nama_pohon} />
                                         <ButtonRedBorder
@@ -334,7 +334,7 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
                                         >
                                             <TbLayersLinked className="mr-1" />
-                                            CrossCuting
+                                            CrossCutting
                                         </ButtonGreenBorder>
                                         <ModalAddCrosscutting isOpen={Cross} onClose={handleCross} id={tema.id} nama_pohon={tema.nama_pohon} />
                                         <ButtonRedBorder
@@ -378,7 +378,7 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
                                         >
                                             <TbLayersLinked className="mr-1" />
-                                            CrossCuting
+                                            CrossCutting
                                         </ButtonGreenBorder>
                                         <ModalAddCrosscutting isOpen={Cross} onClose={handleCross} id={tema.id} nama_pohon={tema.nama_pohon} />
                                         <ButtonRedBorder
@@ -423,7 +423,7 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
                                         >
                                             <TbLayersLinked className="mr-1" />
-                                            CrossCuting
+                                            CrossCutting
                                         </ButtonGreenBorder>
                                         <ModalAddCrosscutting isOpen={Cross} onClose={handleCross} id={tema.id} nama_pohon={tema.nama_pohon} />
                                         <ButtonRedBorder
@@ -492,7 +492,7 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                                             ${tema.jenis_pohon === 'Operational N' && 'border border-green-500'}
                                                         `}
                                                 >
-                                                    tidak ada crosscuting
+                                                    tidak ada crosscutting
                                                 </p>
                                             ) : (
                                                 <TableCrosscuting item={PohonCross} ori={tema.id} hapusPohonOpd={hapusPohonOpd} />
@@ -1764,19 +1764,19 @@ export const newChildButtonName = (jenis: string): string => {
 export const newCrosscutingButtonName = (jenis: string): string => {
     switch (jenis) {
         case 'Strategic Pemda':
-            return '(Crosscuting) Tactical';
+            return '(Crosscutting) Tactical';
         case 'Tactical Pemda':
-            return '(Crosscuting) Operational';
+            return '(Crosscutting) Operational';
         case 'Strategic':
-            return '(Crosscuting) Tactical';
+            return '(Crosscutting) Tactical';
         case 'Tactical':
-            return '(Crosscuting) Opertional';
+            return '(Crosscutting) Opertional';
         case 'Operational':
-            return '(Crosscuting) Opertional N';
+            return '(Crosscutting) Opertional N';
         case 'Operational Pemda':
-            return '(Crosscuting) Opertional N';
+            return '(Crosscutting) Opertional N';
         case 'Operational N':
-            return '(Crosscuting) Opertional N';
+            return '(Crosscutting) Opertional N';
         default:
             return '-'
     }
