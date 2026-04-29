@@ -2,8 +2,8 @@
 
 import { ButtonSky, ButtonSkyBorder, ButtonRedBorder } from "@/components/global/Button";
 import { TbCirclePlus, TbPencil, TbTrash } from "react-icons/tb";
-import { ModalRenaksi } from "../ModalRenaksi";
-import { ModalTahapan } from "../ModalTahapan";
+import { ModalRenaksi } from "./ModalRenaksi";
+import { ModalTahapan } from "./ModalTahapan";
 import React, { useState, useEffect } from "react";
 import { getUser, getToken, getOpdTahun } from "@/components/lib/Cookie";
 import { LoadingSync } from "@/components/global/Loading";

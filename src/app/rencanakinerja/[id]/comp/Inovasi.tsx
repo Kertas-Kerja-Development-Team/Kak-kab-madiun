@@ -1,7 +1,7 @@
 'use client'
 
 import { ButtonSkyBorder, ButtonSky, ButtonRedBorder } from "@/components/global/Button";
-import { ModalInovasi, ModalInovasiEdit } from "../ModalInovasi";
+import { ModalInovasi, ModalInovasiEdit } from "./ModalInovasi";
 import { useState, useEffect } from "react";
 import { LoadingSync } from "@/components/global/Loading";
 import { getToken, getUser } from "@/components/lib/Cookie";

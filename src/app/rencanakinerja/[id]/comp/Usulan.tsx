@@ -2,9 +2,9 @@
 
 import { ButtonSky, ButtonRed } from "@/components/global/Button";
 import { useState, useEffect } from "react";
-import { getUser, getToken } from "@/components/lib/Cookie";
+import { getToken } from "@/components/lib/Cookie";
 import { LoadingSync } from "@/components/global/Loading";
-import { ModalAddUsulan } from "../ModalUsulan";
+import { ModalAddUsulan } from "./ModalUsulan";
 import { AlertQuestion, AlertNotification } from "@/components/global/Alert";
 
 interface table {
