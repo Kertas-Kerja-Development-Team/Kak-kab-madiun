@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     TbPrinter, TbLayersLinked, TbBookmarkPlus, TbCheck, TbCircleLetterXFilled,
     TbCirclePlus, TbHourglass, TbPencil, TbTrash, TbEye, TbEyeClosed, TbArrowAutofitWidth,
-    TbDeviceTabletSearch, TbZoom, TbCircleCheckFilled, TbArrowGuide
+    TbDeviceTabletSearch, TbZoom, TbCircleCheckFilled, TbArrowGuide, TbAB2
 } from 'react-icons/tb';
 import { ButtonSky, ButtonSkyBorder, ButtonRedBorder, ButtonGreenBorder, ButtonBlackBorder } from '@/components/global/Button';
 import { AlertNotification, AlertQuestion } from '@/components/global/Alert';
@@ -206,6 +206,28 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
             console.error(err);
         }
     };
+    const hapusCrosscutting = async (id: number) => {
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
+        try {
+            const response = await fetch(`${API_URL}/crosscutting/delete_crosscutting_diterima/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+            const data = await response.json();
+            if (data.code == 400) {
+                AlertNotification("Gagal", "Crosscutting hanya bisa dihapus saat setelah disetujui", "error", 3000, true);
+            } else if (data.code == 200) {
+                AlertNotification("Berhasil", "Data Crosscutting Di hapus", "success", 1000);
+                deleteTrigger();
+            }
+        } catch (err) {
+            AlertNotification("Gagal", "cek koneksi internet atau database server", "error", 2000);
+            console.error(err);
+        }
+    };
 
 
     return (
@@ -255,6 +277,12 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                         <h1>{tema.jenis_pohon} {tema.id}</h1>
                                     }
                                 </div>
+                                {(tema.status === "crosscutting_disetujui_existing" || tema.status === "crosscutting_disetujui") &&
+                                    <div className="flex text-white justify-center items-center font-bold gap-1 rounded-lg py-2 bg-yellow-500">
+                                        <TbAB2 size={20} />
+                                        Pohon Pilihan Crosscutting
+                                    </div>
+                                }
                                 {/* BODY */}
                                 <div className="flex justify-center my-3">
                                     {Edited ?
@@ -271,6 +299,33 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                         />
                                     }
                                 </div>
+                                {/* CROSSCUTTING DITERIMA */}
+                                {tema.crosscutting &&
+                                    <div className='bg-white border-2 border-yellow-500 rounded-lg'>
+                                        <h1 className='font-bold pt-2 text-yellow-600'>Crosscutting Diterima :</h1>
+                                        <div className="flex flex-col justify-center my-3">
+                                            {tema.crosscutting.map((cr: any, cr_index: number) => (
+                                                <div key={cr_index} className='flex flex-col rounded border border-yellow-500 gap-1 p-2 my-1 mx-2'>
+                                                    <div className="flex justify-center">
+                                                        <h1 className='text-yellow-700'>{cr.nama_opd_asal || "opd tidak diketahui"}</h1>
+                                                        <ButtonRedBorder
+                                                            className='flex items-center gap-1 rounded-full'
+                                                            onClick={() => AlertQuestion("Hapus", "Hapus Crosscutting?", "question", "Hapus", "Batal").then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    hapusCrosscutting(cr.id_crosscutting);
+                                                                }
+                                                            })}
+                                                        >
+                                                            <TbTrash />
+                                                        </ButtonRedBorder>
+                                                    </div>
+                                                    <h1>{cr.keterangan_crosscutting || ""}</h1>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                }
+
                                 {/* BUTTON ACTION INSIDE BOX SUPER ADMIN, ADMIN OPD, ASN LEVEL 1 */}
                                 {(User?.roles == 'super_admin' || User?.roles == 'admin_opd' || User?.roles == 'level_1') &&
                                     !['Strategic Pemda', 'Tactical Pemda', 'Operational Pemda'].includes(tema.jenis_pohon) &&
@@ -284,8 +339,8 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             Edit
                                         </ButtonSkyBorder>
                                         <ButtonGreenBorder
-                                            // onClick={handleCross}
-                                            onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
+                                            onClick={handleCross}
+                                        // onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
                                         >
                                             <TbLayersLinked className="mr-1" />
                                             CrossCutting
@@ -330,8 +385,8 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             Edit
                                         </ButtonSkyBorder>
                                         <ButtonGreenBorder
-                                            // onClick={handleCross}
-                                            onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
+                                            onClick={handleCross}
+                                        // onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
                                         >
                                             <TbLayersLinked className="mr-1" />
                                             CrossCutting
@@ -374,8 +429,8 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             Edit
                                         </ButtonSkyBorder>
                                         <ButtonGreenBorder
-                                            // onClick={handleCross}
-                                            onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
+                                            onClick={handleCross}
+                                        // onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
                                         >
                                             <TbLayersLinked className="mr-1" />
                                             CrossCutting
@@ -419,8 +474,8 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                             Edit
                                         </ButtonSkyBorder>
                                         <ButtonGreenBorder
-                                            // onClick={handleCross}
-                                            onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
+                                            onClick={handleCross}
+                                        // onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
                                         >
                                             <TbLayersLinked className="mr-1" />
                                             CrossCutting
@@ -713,7 +768,6 @@ export const TablePohon = (props: any) => {
     const nama_tematik = props.item.nama_tematik;
     const tagging = props.item.tagging;
     const keterangan = props.item.keterangan;
-    const keterangan_crosscutting = props.item.keterangan_crosscutting;
     const opd = props.item.perangkat_daerah?.nama_opd;
     const nama_opd = props.item.nama_opd;
     const jenis = props.item.jenis_pohon;
@@ -729,7 +783,6 @@ export const TablePohon = (props: any) => {
     const [idReview, setIdReview] = useState<number | null>(null);
     const [Review, setReview] = useState<Review[]>([]);
 
-    const [OpdAsal, setOpdAsal] = useState<string | null>(null);
     const [Proses, setProses] = useState<boolean>(false);
     const [Show, setShow] = useState<boolean>(false);
     const [ShowReview, setShowReview] = useState<boolean>(false);
@@ -812,37 +865,6 @@ export const TablePohon = (props: any) => {
         }
     }, [ShowDetail]);
 
-    useEffect(() => {
-        const API_URL = process.env.NEXT_PUBLIC_API_URL;
-        const fetchOpdAsal = async () => {
-            try {
-                setProses(true);
-                const response = await fetch(`${API_URL}/crosscutting_opd/opd-from/${id}`, {
-                    method: "GET",
-                    headers: {
-                        Authorization: `${token}`,
-                        'Content-Type': 'application/json',
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error('kesalahan ketika fetch data opd asal');
-                }
-                const data = await response.json();
-                if (data.code === 500) {
-                    setOpdAsal(null);
-                } else {
-                    setOpdAsal(data.data.nama_opd);
-                    // console.log(data.data.nama_opd);
-                }
-            } catch (err) {
-                console.error(err, "gagal fetch data opd asal");
-            } finally {
-                setProses(false);
-            }
-        }
-        fetchOpdAsal();
-    }, [token, id]);
-
     return (
         <div className='flex flex-col w-full'>
             <div className="flex flex-col w-full">
@@ -867,31 +889,6 @@ export const TablePohon = (props: any) => {
             </div>
             <table className='w-full'>
                 <tbody>
-                    {(status === 'crosscutting_disetujui' || status === 'crosscutting_disetujui_existing') &&
-                        <tr>
-                            <td
-                                className={`min-w-[100px] border px-2 py-1 text-start rounded-l-lg ${status === 'crosscutting_disetujui' && 'border-yellow-700'} bg-slate-200
-                                            ${jenis === "Strategic" && "border-red-700"}
-                                            ${jenis === "Tactical" && "border-blue-500"}
-                                            ${(jenis === "Operational" || jenis === "Operational N") && "border-green-500"}
-                                        `}
-                            >
-                                <div className="flex flex-col">
-                                    <p>keterangan</p>
-                                    <p>Crosscutting</p>
-                                </div>
-                            </td>
-                            <td
-                                className={`min-w-[300px] border px-2 py-3 text-start rounded-r-lg ${status === 'crosscutting_disetujui' && 'border-yellow-700'} bg-slate-200
-                                            ${jenis === "Strategic" && "border-red-700"}
-                                            ${jenis === "Tactical" && "border-blue-500"}
-                                            ${(jenis === "Operational" || jenis === "Operational N") && "border-green-500"}
-                                        `}
-                            >
-                                {keterangan_crosscutting ? keterangan_crosscutting : "-"}
-                            </td>
-                        </tr>
-                    }
                     <tr>
                         <td
                             className={`min-w-[100px] border px-2 py-3 bg-white text-start rounded-tl-lg
@@ -1259,28 +1256,6 @@ export const TablePohon = (props: any) => {
                                         ) : (
                                             <span>{status || "-"} / {nama_tematik || "-"}</span>
                                         )}
-                                    </td>
-                                </tr>
-                            }
-                            {(status === "crosscutting_disetujui" || status === "crosscutting_disetujui_existing") &&
-                                <tr>
-                                    <td
-                                        className={`min-w-[100px] border px-2 py-1 text-start rounded-l-lg ${status === 'crosscutting_disetujui' && 'border-yellow-700'} bg-slate-200
-                                            ${jenis === "Strategic" && "border-red-700"}
-                                            ${jenis === "Tactical" && "border-blue-500"}
-                                            ${(jenis === "Operational" || jenis === "Operational N") && "border-green-500"}
-                                        `}
-                                    >
-                                        Crosscutting Dari
-                                    </td>
-                                    <td
-                                        className={`min-w-[300px] border px-2 py-3 text-start rounded-r-lg ${status === 'crosscutting_disetujui' && 'border-yellow-700'} bg-slate-200
-                                            ${jenis === "Strategic" && "border-red-700"}
-                                            ${jenis === "Tactical" && "border-blue-500"}
-                                            ${(jenis === "Operational" || jenis === "Operational N") && "border-green-500"}
-                                        `}
-                                    >
-                                        {Proses ? "Loading.." : OpdAsal ? OpdAsal : "-"}
                                     </td>
                                 </tr>
                             }

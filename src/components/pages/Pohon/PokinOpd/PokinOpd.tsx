@@ -626,8 +626,8 @@ const PokinOpd = () => {
                             </div>
                             <ButtonSkyBorder
                                 className="w-full"
-                                // onClick={handleModalCrosscutting}
-                                onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
+                                onClick={handleModalCrosscutting}
+                                // onClick={() => AlertNotification("Dalam Pengembangan", "", "info", 2000)}
                             >
                                 <TbSettings className='mr-1' />
                                 Edit
