@@ -323,6 +323,7 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                                         </div>
                                                     </div>
                                                     <h1>{cr.keterangan_crosscutting || ""}</h1>
+                                                    <h1>nama pohon : {cr.nama_pohon_asal || "-"}</h1>
                                                 </div>
                                             ))}
                                         </div>
