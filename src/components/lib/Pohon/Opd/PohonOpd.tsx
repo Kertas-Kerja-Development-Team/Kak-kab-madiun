@@ -199,7 +199,7 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                 AlertNotification("Gagal", "Crosscutting hanya bisa dihapus saat setelah disetujui", "error", 3000, true);
             } else if (data.code == 200) {
                 AlertNotification("Berhasil", "Data pohon Crosscutting Di hapus", "success", 1000);
-                deleteTrigger();
+                fetchTrigger();
             }
         } catch (err) {
             AlertNotification("Gagal", "cek koneksi internet atau database server", "error", 2000);
@@ -221,7 +221,7 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                 AlertNotification("Gagal", "Crosscutting hanya bisa dihapus saat setelah disetujui", "error", 3000, true);
             } else if (data.code == 200) {
                 AlertNotification("Berhasil", "Data Crosscutting Di hapus", "success", 1000);
-                deleteTrigger();
+                fetchTrigger();
             }
         } catch (err) {
             AlertNotification("Gagal", "cek koneksi internet atau database server", "error", 2000);
@@ -553,7 +553,7 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                                     tidak ada crosscutting
                                                 </p>
                                             ) : (
-                                                <TableCrosscuting item={PohonCross} ori={tema.id} hapusPohonOpd={hapusPohonOpd} />
+                                                <TableCrosscuting item={PohonCross} ori={tema.id} hapusPohonCross={hapusPohonCross} />
                                             )}
                                         </div>
                                     </>
@@ -1455,8 +1455,9 @@ export const TablePohon = (props: any) => {
     )
 }
 export const TableCrosscuting = (props: any) => {
+
     const { item, hapusPohonCross } = props;
-    
+
     return (
         <div className={`flex flex-col w-full`}>
             {item.map((data: any, index: number) => (
@@ -1465,16 +1466,11 @@ export const TableCrosscuting = (props: any) => {
                         <h1 className='p-1'>Crosscutting ke {index + 1}</h1>
                         <ButtonRedBorder
                             onClick={() => {
-                                // AlertNotification("Maintenance", "Fitur hapus crosscutting masih dalam pengembangan", "info", 3000);
-                                // if ((data.status === 'crosscutting_disetujui' || data.status === 'crosscutting_disetujui_existing')) {
-                                //     AlertNotification("Pohon Harus Ditolak/Pending", "Pohon harus berstatus ditolak atau Pending untuk bisa dihapus, hal ini mencegah pohon yang sudah diterima (beserta anak pohonnya) terhapus tanpa persetujuan ke dua OPD", "warning", 50000, true);
-                                // } else {
-                                    AlertQuestion("Hapus?", "Hapus pohon crosscutting?", "question", "Hapus", "Batal").then((result) => {
-                                        if (result.isConfirmed) {
-                                            hapusPohonCross(data.id_crosscutting);
-                                        }
-                                    });
-                                // }
+                                AlertQuestion("Hapus?", "Hapus pohon crosscutting?", "question", "Hapus", "Batal").then((result) => {
+                                    if (result.isConfirmed) {
+                                        hapusPohonCross(data.id_crosscutting);
+                                    }
+                                });
                             }}
                         >
                             Hapus
