@@ -184,7 +184,7 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
         const API_URL = process.env.NEXT_PUBLIC_API_URL;
         // console.log("id yang dihapus : ", id, "ori : ", ori);
         try {
-            const response = await fetch(`${API_URL}/crosscutting_opd/delete/${id}/${User?.nip}`, {
+            const response = await fetch(`${API_URL}/crosscutting_opd/delete/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `${token}`,
@@ -209,7 +209,7 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
     const hapusCrosscutting = async (id: number) => {
         const API_URL = process.env.NEXT_PUBLIC_API_URL;
         try {
-            const response = await fetch(`${API_URL}/crosscutting/delete_crosscutting_diterima/${id}`, {
+            const response = await fetch(`${API_URL}/crosscutting_opd/delete_crosscutting_diterima/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `${token}`,
@@ -306,18 +306,21 @@ export const PohonOpd: React.FC<pohon> = ({ tema, deleteTrigger, fetchTrigger, s
                                         <div className="flex flex-col justify-center my-3">
                                             {tema.crosscutting.map((cr: any, cr_index: number) => (
                                                 <div key={cr_index} className='flex flex-col rounded border border-yellow-500 gap-1 p-2 my-1 mx-2'>
-                                                    <div className="flex justify-center">
+                                                    <div className="flex justify-center gap-2">
                                                         <h1 className='text-yellow-700'>{cr.nama_opd_asal || "opd tidak diketahui"}</h1>
-                                                        <ButtonRedBorder
-                                                            className='flex items-center gap-1 rounded-full'
-                                                            onClick={() => AlertQuestion("Hapus", "Hapus Crosscutting?", "question", "Hapus", "Batal").then((result) => {
-                                                                if (result.isConfirmed) {
-                                                                    hapusCrosscutting(cr.id_crosscutting);
-                                                                }
-                                                            })}
-                                                        >
-                                                            <TbTrash />
-                                                        </ButtonRedBorder>
+                                                        <div>
+                                                            <button
+                                                                type="button"
+                                                                className='flex items-center gap-1 rounded-full border border-red-500 p-1 text-red-500 hover:bg-red-300 hover:text-white'
+                                                                onClick={() => AlertQuestion("Hapus", "Hapus Crosscutting?", "question", "Hapus", "Batal").then((result) => {
+                                                                    if (result.isConfirmed) {
+                                                                        hapusCrosscutting(cr.id_crosscutting);
+                                                                    }
+                                                                })}
+                                                            >
+                                                                <TbTrash />
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                     <h1>{cr.keterangan_crosscutting || ""}</h1>
                                                 </div>
@@ -1452,8 +1455,8 @@ export const TablePohon = (props: any) => {
     )
 }
 export const TableCrosscuting = (props: any) => {
-    const { item, hapusPohonOpd } = props;
-
+    const { item, hapusPohonCross } = props;
+    
     return (
         <div className={`flex flex-col w-full`}>
             {item.map((data: any, index: number) => (
@@ -1462,15 +1465,15 @@ export const TableCrosscuting = (props: any) => {
                         <h1 className='p-1'>Crosscutting ke {index + 1}</h1>
                         <ButtonRedBorder
                             onClick={() => {
-                                AlertNotification("Maintenance", "Fitur hapus crosscutting masih dalam pengembangan", "info", 3000);
+                                // AlertNotification("Maintenance", "Fitur hapus crosscutting masih dalam pengembangan", "info", 3000);
                                 // if ((data.status === 'crosscutting_disetujui' || data.status === 'crosscutting_disetujui_existing')) {
                                 //     AlertNotification("Pohon Harus Ditolak/Pending", "Pohon harus berstatus ditolak atau Pending untuk bisa dihapus, hal ini mencegah pohon yang sudah diterima (beserta anak pohonnya) terhapus tanpa persetujuan ke dua OPD", "warning", 50000, true);
                                 // } else {
-                                //     AlertQuestion("Hapus?", "Hapus pohon crosscutting?", "question", "Hapus", "Batal").then((result) => {
-                                //         if (result.isConfirmed) {
-                                //             hapusPohonOpd(data.id);
-                                //         }
-                                //     });
+                                    AlertQuestion("Hapus?", "Hapus pohon crosscutting?", "question", "Hapus", "Batal").then((result) => {
+                                        if (result.isConfirmed) {
+                                            hapusPohonCross(data.id_crosscutting);
+                                        }
+                                    });
                                 // }
                             }}
                         >
