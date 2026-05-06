@@ -203,12 +203,18 @@ export const TablePerencanaan = () => {
                                                         <div className={`flex flex-col gap-2 bg-green-100 border border-green-600 rounded-lg p-5`}>
                                                             <div className="flex items-center justify-between gap-1">
                                                                 <p className="text-start">{item.nama_indikator || "-"}</p>
-                                                                {item.targets.map((t: target, t_index: number) => (
-                                                                    <div className="flex flex-col border border-green-600 rounded-lg px-4 py-1" key={t_index}>
-                                                                        <p className="border-b border-black">{t.target || "-"}</p>
-                                                                        <p>{t.satuan || "-"}</p>
+                                                                {item.targets ?
+                                                                    item.targets.map((t: target, t_index: number) => (
+                                                                        <div className="flex flex-col border border-green-600 rounded-lg px-4 py-1" key={t_index}>
+                                                                            <p className="border-b border-black">{t.target || "-"}</p>
+                                                                            <p>{t.satuan || "-"}</p>
+                                                                        </div>
+                                                                    ))
+                                                                    :
+                                                                    <div className="flex flex-col border border-green-600 rounded-lg px-4 py-1">
+                                                                        <p>-</p>
                                                                     </div>
-                                                                ))}
+                                                                }
                                                             </div>
                                                             <ButtonGreenBorder
                                                                 halaman_url={`rencanakinerja/manual_ik/${item.id_indikator}`}
