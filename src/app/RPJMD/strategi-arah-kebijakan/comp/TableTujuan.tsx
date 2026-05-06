@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useEffect, useState } from "react";
-import { TujuanOpd } from "../type";
+import { TujuanPemda } from "../type";
 
 interface Table {
-    Data: TujuanOpd[];
+    Data: TujuanPemda[];
 }
 
 const TableTujuan: React.FC<Table> = ({ Data }) => {
@@ -16,7 +16,7 @@ const TableTujuan: React.FC<Table> = ({ Data }) => {
                     <thead>
                         <tr className="bg-blue-500 text-white">
                             <th className="border-r border-b px-6 py-3 w-[50px] text-center">No</th>
-                            <th className="border-r border-b px-6 py-3 min-w-[200px]">Tujuan OPD</th>
+                            <th className="border-r border-b px-6 py-3 min-w-[200px]">Tujuan Pemda</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,7 +27,7 @@ const TableTujuan: React.FC<Table> = ({ Data }) => {
                                 </td>
                             </tr>
                             :
-                            Data.map((data: TujuanOpd, index: number) => (
+                            Data.map((data: TujuanPemda, index: number) => (
                                 <tr key={data.id || index}>
                                     <td className="border-r border-b px-6 py-2 text-center">{index + 1}</td>
                                     <td className="border-r border-b px-6 py-2">{data.tujuan || "-"}</td>

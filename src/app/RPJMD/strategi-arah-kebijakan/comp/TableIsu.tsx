@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useEffect, useState } from "react";
-import { IsuStrategisOpd } from "../type";
+import { IsuStrategisPemda } from "../type";
 
 interface Table {
-    Data: IsuStrategisOpd[];
+    Data: IsuStrategisPemda[];
 }
 
 const TableIsu: React.FC<Table> = ({ Data }) => {
@@ -27,7 +27,7 @@ const TableIsu: React.FC<Table> = ({ Data }) => {
                                 </td>
                             </tr>
                             :
-                            Data.map((data: IsuStrategisOpd, index: number) => (
+                            Data.map((data: IsuStrategisPemda, index: number) => (
                                 <tr key={index}>
                                     <td className="border-r border-b px-6 py-2 text-center">{index + 1}</td>
                                     <td className="border-r border-b px-6 py-2">{data.nama_isu_strategis || "-"}</td>
